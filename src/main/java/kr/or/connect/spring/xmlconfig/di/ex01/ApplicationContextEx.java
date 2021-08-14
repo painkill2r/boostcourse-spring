@@ -3,7 +3,7 @@ package kr.or.connect.spring.xmlconfig.di.ex01;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-public class ApplicationContextEx02 {
+public class ApplicationContextEx {
 
     public static void main(String[] args) {
         ApplicationContext context = new ClassPathXmlApplicationContext("classpath:applicationContext.xml");

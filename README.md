@@ -198,3 +198,41 @@
     - `BeanPostProcessor`, `BeanFactoryPostProcessor`등을 자동으로 등록하고, 국제화 처리, 어플리케이션 이벤트 등을 처리할 수 있다.
         - BeanPostProcessor : 컨테이너의 기본 로직을 오버라이딩하여 인스턴스화와 의존성 처리 로직 등을 개발자가 원하는 대로 구현 할 수 있도록 한다.
         - BeanFactoryPostProcessor : 설정된 메타 데이터를 커스터마이징 할 수 있음.
+
+## XML 설정 파일을 사용한 IoC/DI
+
+   ```xml
+   <?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                              http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="userBean" class="kr.or.connect.spring.xmlconfig.ioc.ex01.UserBean"/>
+    <bean id="engine" class="kr.or.connect.spring.xmlconfig.di.ex01.Engine"/>
+    <bean id="car" class="kr.or.connect.spring.xmlconfig.di.ex01.Car">
+        <property name="engine" ref="engine"/>
+    </bean>
+
+</beans>
+   ```
+
+## Java 설정 파일을 사용한 IoC/DI
+
+1. (주의) JDK 5 버전 이상부터 사용 가능하다.
+
+### Java Config를 이용한 설정을 위한 어노테이션
+
+1. `@Configuration`
+    - 스프링 설정 클래스라는 의미를 선언하는 어노테이션
+    - Java Config로 설정을 할 클래스 위에 @Configuration이 붙어 있어야 한다.
+    - ApplicationContext 중에서 `AnnotationConfigApplicationContext`는 Java Config 클래스를 읽어들여 IoC/DI를 적용한다.
+        - 설정파일 중에 `@Bean`이 붙어 있는 메소드들을 자동으로 실행하여 그 결과로 리턴하는 객체들을 기본적으로 `싱글톤`으로 관리한다.
+2. `@Bean`
+    - Bean을 정의하는 어노테이션
+3. `@ComponentScan`
+    - `@Controller`, `@Service`, `@Repository`, `@Component` 어노테이션이 붙은 클래스를 찾아 컨테이너에 등록
+4. `@Component`
+    - 컴포넌트 스캔의 대상이 되는 애노테이션 중 하나로써 주로 유틸, 기타 지원 클래스에 붙이는 어노테이션
+5. `@Autowired`
+    - 주입 대상이되는 bean을 컨테이너에 찾아 주입하는 어노테이션

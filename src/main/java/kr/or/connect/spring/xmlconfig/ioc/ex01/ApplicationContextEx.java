@@ -3,7 +3,7 @@ package kr.or.connect.spring.xmlconfig.ioc.ex01;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-public class ApplicationContextEx01 {
+public class ApplicationContextEx {
 
     public static void main(String[] args) {
         //classpath => resources 디렉토리를 가르킴.

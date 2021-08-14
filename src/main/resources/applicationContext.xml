@@ -6,7 +6,14 @@
 
     <!-- resources 디렉토리에 생성된 XML 파일은 자동으로 classpath로 지정된다. -->
 
-    <!-- 싱글톤 패턴 형식으로 UserBean 타입의 Bean 생성 -->
-    <bean id="userBean" class="kr.or.connect.spring.UserBean"></bean>
+    <!-- (kr.or.connect.spring.di.ex01 예제)싱글톤 패턴 형식으로 UserBean 타입의 Bean 생성 -->
+    <bean id="userBean" class="kr.or.connect.spring.xmlconfig.ioc.ex01.UserBean"/>
+
+    <!-- (kr.or.connect.spring.di.ex02 예제) -->
+    <bean id="engine" class="kr.or.connect.spring.xmlconfig.di.ex01.Engine"/>
+    <bean id="car" class="kr.or.connect.spring.xmlconfig.di.ex01.Car">
+        <!-- DI => Car Bean 객체의 "engine" 프로퍼티에 Engine Bean 객체를 주입한다.(setter 메소드 동작) -->
+        <property name="engine" ref="engine"/>
+    </bean>
 
 </beans>

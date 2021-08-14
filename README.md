@@ -16,11 +16,84 @@
 
 ### Maven 프로젝트 설정
 
+1. IntelliJ에서 New Project 선택
+   ![IntelliJ > New Project](images/settings/setting01.png)
+2. `Maven` 선택, `org.apache.maven.archetypes:maven-archetype-webapp` 선택 후 Next 버튼 클릭
+   ![IntelliJ > New Project](images/settings/setting02.png)
+3. `GroupId`, `ArtifactId`, `Version` 설정 후 Next 버튼 클릭
+   ![IntelliJ > New Project](images/settings/setting03.png)
+    - GroupId는 보통 프로젝트를 진행하는 회사나 팀의 도메인 이름을 거꾸로 적는다.
+    - ArtifactId는 해당 프로젝트의 이름을 적는다.
+    - Version은 보통 기본값(1.0-SNAPSHOT)으로 설정한다.
+    - 여기서는 언급되지 않지만 `Package`라는 것이 있는데, 이는 GroupId와 ActifactId가 조합된 형태를 가진다.
+4. Finish 버튼 클릭
+   ![IntelliJ > New Project](images/settings/setting04.png)
+
 ### Spring Framework 프로젝트로 변경
+
+1. `pom.xml` 내용 변경
+    - Spring Framework 라이브러리 추가
+    - Build 설정
+   ```xml
+   <?xml version="1.0" encoding="UTF-8"?>
+   <project xmlns="http://maven.apache.org/POM/4.0.0"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                                http://maven.apache.org/xsd/maven-4.0.0.xsd">
+       <modelVersion>4.0.0</modelVersion>
+       <groupId>kr.or.connect</groupId>
+       <artifactId>spring</artifactId>
+       <version>1.0-SNAPSHOT</version>
+       <packaging>war</packaging>
+       <name>spring Maven Webapp</name>
+       <url>http://www.example.com</url>
+   
+       <!-- 프로퍼티 설정 추가 -->
+       <properties>
+           <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+           <maven.compiler.source>11</maven.compiler.source>
+           <maven.compiler.target>11</maven.compiler.target>
+           <!-- 해당 프로젝트에서 사용하는 Spring Framework 버전 -->
+           <spring.version>4.3.14.RELEASE</spring.version>
+       </properties>
+   
+       <dependencies>
+           <!-- Spring Framework 라이브러리 추가 -->
+           <dependency>
+               <groupId>org.springframework</groupId>
+               <artifactId>spring-context</artifactId>
+               <version>${spring.version}</version>
+           </dependency>
+   
+           <!-- JUnit Test 라이브러리 추가 -->
+           <dependency>
+               <groupId>junit</groupId>
+               <artifactId>junit</artifactId>
+               <version>3.8.1</version>
+               <scope>test</scope>
+           </dependency>
+       </dependencies>
+   
+       <!-- 빌드 설정 추가 -->
+       <build>
+           <plugins>
+               <plugin>
+                   <groupId>org.apache.maven.plugins</groupId>
+                   <artifactId>maven-compiler-plugin</artifactId>
+                   <version>3.6.1</version>
+                   <configuration>
+                       <source>11</source>
+                       <target>11</target>
+                   </configuration>
+               </plugin>
+           </plugins>
+       </build>
+   </project>
+   ```
 
 ## Spring Framework
 
-![Spring Framework](./images/spring01.png)
+![Spring Framework](./images/spring/spring01.png)
 
 1. 엔터프라이즈급 어플리케이션을 구축할 수 있는 가벼운 솔루션이자, 원스-스탑-숍(One-Stop-Shop).
     - One-Stop-Shop: 모든 과정을 한꺼번에 해결할 수 있다.
@@ -83,6 +156,8 @@
 ### DI(Dependency Injection, 의존성 주입)
 
 1. DI는 의존성 주입이란 뜻을 가지고 있으며, `클래스 사이의 의존 관계를 빈(Bean) 설정 정보를 바탕으로 컨테이너가 자동으로 연결`해주는 것을 말한다.
+    - `빈(Bean)`: `Spring 컨테이너가 관리하는 객체`를 의미한다.
+        - 직접 `new 연산자`로 생성하는 객체는 빈(Bean)이 아니다.
     - DI가 적용 안된 (예)
       ```java
       class 엔진 {
@@ -93,7 +168,7 @@
            엔진 v5 = new 엔진();
       }
        ```
-      ![DI가 적용 안된 예](./images/di01.png)
+      ![DI가 적용 안된 예](./images/spring/di01.png)
     - DI가 적용된 (예)
       ```java
       @Component
@@ -107,13 +182,19 @@
            엔진 v5;
       }
       ```
-      ![DI가 적용된 예](./images/di02.png)
+      ![DI가 적용된 예](./images/spring/di02.png)
 
 ### Spring에서 제공하는 IoC/DI 컨테이너
 
-1. BeanFactory : IoC/DI에 대한 기본 기능을 가지고 있음.
-2. ApplicationContext : BeanFactory의 모든 기능을 포함하며, 일반적으로 BeanFactory보다 추천된다.
-    - 트랜잭션처리, AOP등에 대한 처리를 할 수 있음.
-    - `BeanPostProcessor`, `BeanFactoryPostProcessor`등을 자동으로 등록하고, 국제화 처리, 어플리케이션 이벤트 등을 처리할 수 있음.
+1. BeanFactory
+    - IoC/DI에 대한 기본 기능을 가지고 있음.
+        - 스프링 설정 파일에 등록된 Bean 객체를 생성하고 관리하는 기본적인 기능만 제공한다.
+    - 컨테이너가 구동될 때 Bean 객체를 생성하는 것이 아니라 클라이언트의 요청에 의해서 Bean 객체가 사용되는 시점(`Lazy Loading`)에 객체를 생성하는 방식을 사용한다.
+2. ApplicationContext
+    - BeanFactory의 모든 기능을 포한다.
+        - 일반적으로 BeanFactory보다 `추천`된다.
+    - 트랜잭션 처리(관리), 메시지 기반 다국어 처리, AOP 처리 등 IoC/DI 외에도 많은 부분을 지원한다.
+    - 컨테이너가 구동되는 시점에 객체들을 생성하는 `Pre-Loading` 방식이 BeanFactory와 가장 큰 차이점이다.
+    - `BeanPostProcessor`, `BeanFactoryPostProcessor`등을 자동으로 등록하고, 국제화 처리, 어플리케이션 이벤트 등을 처리할 수 있다.
         - BeanPostProcessor : 컨테이너의 기본 로직을 오버라이딩하여 인스턴스화와 의존성 처리 로직 등을 개발자가 원하는 대로 구현 할 수 있도록 한다.
         - BeanFactoryPostProcessor : 설정된 메타 데이터를 커스터마이징 할 수 있음.

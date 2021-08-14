@@ -1,4 +1,4 @@
-package kr.or.connect.spring;
+package kr.or.connect.spring.xmlconfig.ioc.ex01;
 
 /**
  * [Bean 클래스의 규칙]

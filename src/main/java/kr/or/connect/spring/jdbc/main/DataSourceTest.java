@@ -1,5 +1,6 @@
-package kr.or.connect.spring.jdbc;
+package kr.or.connect.spring.jdbc.main;
 
+import kr.or.connect.spring.jdbc.ApplicationConfig;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 

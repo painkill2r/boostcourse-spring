@@ -299,3 +299,27 @@
 |assertNotNull(x)|객체 x가 NULL이 아니면 테스트 성공|
 |assertSame(x, y)|x와 y가 같은 객체임을 확인한다. 즉, 객체 x와 y가 같은 객체를 참조하고 있으면 테스트 성공. `assertEquals()`는 값이 같은지를 확인하고, `assertSame()`은 같은 레퍼런스인지를 확인한다.|
 |assertNotSame(x, y)|x와 y가 같은 객체를 참조하고 있지 않으면 테스트 성공|
+
+### Spring Test
+
+1. 스프링 프레임워크에서 등록된 `빈(Bean)`에 대해서 테스트를 하기 위해서는 추가적인 라이브러리 설정이 필요하다.
+   ```xml
+   <!-- Spring Framework Test 라이브러리 추가 -->
+   <dependency>
+       <groupId>org.springframework</groupId>
+       <artifactId>spring-test</artifactId>
+       <version>${spring.version}</version>
+   </dependency>
+   ```
+
+### JUnit 4를 사용하여 Spring 빈(Bean) 테스트를 하는 경우 주로 사용하는 어노테이션
+
+1. @RunWith(SpringJUnit4ClassRunner.class)
+    - `@RunWith`은 JUnit이 제공하는 어노테이션이다.
+    - JUnit은 확장 기능을 가지는데, 스프링에서는 JUnit을 확장할 수 있도록 `SpringJUnit4ClassRunner.class`를 제공한다.
+    - 이는 JUnit이 테스트 코드를 실행할 때 스프링 빈 컨테이너가 내부적으로 생성되도록 한다.
+2. @ContextConfiguration(classes = {ApplicationConfig.class})
+    - 내부적으로 생성된 스프링 빈 컨테이너가 사용할 설정파일을 지정할 때 사용한다.
+3. @Autowired
+    - 위에서 설명한 두 항목이 테스트 클래스에 선언되어 있으면, 테스트 클래스 자체가 빈(Bean) 객체가 되어 스프링에서 관리된다.
+    - 따라서 @Autowired를 이용하여 테스트에 필요한 다른 빈(Bean)을 주입(Injection)받아 사용할 수 있다.

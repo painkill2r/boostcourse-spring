@@ -323,3 +323,40 @@
 3. @Autowired
     - 위에서 설명한 두 항목이 테스트 클래스에 선언되어 있으면, 테스트 클래스 자체가 빈(Bean) 객체가 되어 스프링에서 관리된다.
     - 따라서 @Autowired를 이용하여 테스트에 필요한 다른 빈(Bean)을 주입(Injection)받아 사용할 수 있다.
+
+### 로직 단위 테스트
+
+1. 빈들 간에는 다양한 관계를 맺고 있는 경우가 많다. 하나의 빈을 사용한다는 것은 관계된 빈들도 함께 동작한다는 것을 의미한다.
+2. 하나의 빈을 테스트할 때 관련된 빈들이 모두 잘 동작하는지 테스트하는 것을 우리는 `통합 테스트(Integration test)`라 한다.
+3. 관계된 다른 클래스와는 상관 없이 특정 빈이 가지고 있는 기능만 잘 동작하는지 확인하는 것을 우리는 `단위 테스트(Unit test)`라 한다.
+
+#### Mock 객체 사용하기
+
+1. `mockito` 라이브러리 추가
+    - 테스트를 위한 가짜 객체를 쉽게 만들어주는 프레임워크이다.
+      ```xml
+      <!-- Test mock을 위한 라이브러리 추가 -->
+       <dependency>
+           <groupId>org.mockito</groupId>
+           <artifactId>mockito-core</artifactId>
+           <version>1.9.5</version>
+           <scope>test</scope>
+       </dependency>
+      ```
+2. mockito를 사용한 JUnit 테스트 시 사용하는 어노테이션
+    - @RunWith(MockitoJUnitRunner.class)
+        - mockito가 제공하는 Junit 확장 클래스 MockitoJunitRunner를 이용해 테스트 클래스를 실행하도록 합니다.
+    - @Mock
+        - @Mock이 설정된 클래스가 Mock 객체를 참조하도록 한다.
+        - 객체를 생성하지 않아도 자동으로 객체가 생성되고 해당 필드가 초기화 된다는 것을 의미한다.
+         ```java
+         @Mock
+         CalculatorService calculatorService;
+         ```
+    - @InjectMocks
+        - Mock 객체를 사용하는 객체를 생성하여 초기화하라는 의미를 가진다.
+           ```java
+           @InjectMocks
+           MyService myService;
+           ```
+   

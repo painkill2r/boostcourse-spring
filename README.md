@@ -345,7 +345,7 @@
       ```
 2. mockito를 사용한 JUnit 테스트 시 사용하는 어노테이션
     - @RunWith(MockitoJUnitRunner.class)
-        - mockito가 제공하는 Junit 확장 클래스 MockitoJunitRunner를 이용해 테스트 클래스를 실행하도록 합니다.
+        - mockito가 제공하는 Junit 확장 클래스 `MockitoJunitRunner`를 이용해 테스트 클래스를 실행하도록 한다.
     - @Mock
         - @Mock이 설정된 클래스가 Mock 객체를 참조하도록 한다.
         - 객체를 생성하지 않아도 자동으로 객체가 생성되고 해당 필드가 초기화 된다는 것을 의미한다.
@@ -359,4 +359,75 @@
            @InjectMocks
            MyService myService;
            ```
-   
+
+## Spring JDBC
+
+1. JDBC 프로그래밍을 보면 반복되는 개발 요소가 존재한다.
+2. 이렇게 반복되는 개발 요소를 스프링 프레임워크가 제공하는 `spring-jdbc`가 처리해준다.
+
+### Spring JDBC를 사용하는 경우 개발자가 해야할 일
+
+|동작|스프링|개발자|
+|:----|:----:|:----:|
+|연결 파라미터 정의|X|O|
+|연결 오픈|O|X|
+|SQL문 지정|X|O|
+|파라미터 선언과 파라미터 값 제공|X|O|
+|Statement 준비와 실행|O|X|
+|(값이 존재 한다면)결과를 반복하는 Loop 설정|O|X|
+|각 Iteration에 대한 작업 수행|X|O|
+|모든 예외 처리|O|X|
+|트랜잭션 제어|O|X|
+|연결 해제(리소스 반환)|O|X|
+
+### Spring JDBC 패키지
+
+1. org.springframework.jdbc.core
+    - JdbcTemplate 및 관련 Helper 객체 제공
+2. org.springframework.jdbc.datasource
+    - DataSource를 쉽게 접근하기 위한 유틸 클래스, 트랜젝션매니져 및 다양한 DataSource 구현을 제공
+3. org.springframework.jdbc.object
+    - RDBMS 조회, 갱신, 저장등을 안전하고 재사용 가능한 객제 제공
+4. org.springframework.jdbc.support
+    - jdbc.core 및 jdbc.object를 사용하는 JDBC 프레임워크를 지원
+
+### JDBC Template
+
+1. `org.springframework.jdbc.core`에서 가장 중요한 클래스
+2. 리소스 생성, 해지를 처리해서 연결을 닫는 것을 잊어 발생하는 문제 등을 피할 수 있게 도와준다.
+3. Statement의 생성과 실행을 처리한다.
+4. SQL 조회, 업데이트, 저장 프로시저 호출, ResultSet 반복 호출 등을 실행한다.
+5. JDBC 예외가 발생할 경우 `org.springframework.dao`에 정의되어 있는 일반적인 예외로 변환시킨다.
+
+#### JDBC Template 외 접근 방법
+
+1. NamedParameterJdbcTemplate
+    - JdbcTemplate에서 JDBC statement 인자를 사용하는 대신 파라미터명을 사용하여 작성하는 것을 지원
+2. SimpleJdbcTemplate
+    - JdbcTemplate과 NamedParameterJdbcTemplate 합쳐 놓은 템플릿 클래스
+    - 지금은 JdbcTemplate과 NamedParameterJdbcTemplate에 모든 기능을 제공하기 때문에 `삭제 예정될 예정(Deprecated)`
+3. SimpleJdbcInsert
+    - 테이블에 쉽게 데이터 insert 기능을 제공
+
+### DTO( Data Transfer Object)
+
+1. 계층간 데이터 교환을 위한 자바 빈즈이다.
+    - 여기서의 계층이란 컨트롤러 뷰, 비지니스 계층, 퍼시스턴스 계층을 의미
+2. 일반적으로 DTO는 로직을 가지고 있지 않고, 순수한 데이터 객체입니다.
+    - 필드와 getter, setter를 가지고, 추가적으로 toString(), equals(), hashCode()등의 Object 메소드를 오버라이딩 할 수 있다.
+
+### DAO(DAO란 Data Access Object)
+
+1. 데이터를 조회하거나 조작하는 기능을 전담하도록 만든 객체이다.
+2. 보통 데이터베이스를 조작하는 기능을 전담하는 목적으로 만들어 진다.
+
+### Connection Pool
+
+1. DB 연결은 비용이 많이 든다.
+2. `커넥션 풀`은 미리 커넥션을 여러 개 맺어 둡니다.
+3. 커넥션이 필요하면 커넥션 풀에게 빌려서 사용한 후 반납한다.
+
+### DataSource
+
+1. 커넥션 풀을 관리하는 목적으로 사용되는 객체이다.
+2. DataSource를 이용해 커넥션을 얻어오고 반납하는 등의 작업을 수행한다.
